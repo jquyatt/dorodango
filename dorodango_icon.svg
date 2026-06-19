@@ -1,0 +1,54 @@
+<svg width="100%" viewBox="0 0 680 680" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Dorodango icon</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">A polished mud ball — deep brown sphere with subtle earthy texture and a soft reflective sheen</desc>
+
+  <defs>
+    <radialGradient id="base" cx="42%" cy="38%" r="58%" fx="38%" fy="32%">
+      <stop offset="0%" stop-color="#7a4e2d"/>
+      <stop offset="30%" stop-color="#5a3318"/>
+      <stop offset="70%" stop-color="#3b1f0a"/>
+      <stop offset="100%" stop-color="#1e0d03"/>
+    </radialGradient>
+    <radialGradient id="gloss" cx="38%" cy="30%" r="38%">
+      <stop offset="0%" stop-color="#c8956a" stop-opacity="0.38"/>
+      <stop offset="60%" stop-color="#a0622a" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#5a3318" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="deepshadow" cx="65%" cy="72%" r="46%">
+      <stop offset="0%" stop-color="#0d0503" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#0d0503" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="highlight" cx="33%" cy="26%" r="18%">
+      <stop offset="0%" stop-color="#f5dfc0" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#f5dfc0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="floorShadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a0a02" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1a0a02" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="ballClip">
+      <circle cx="340" cy="330" r="268"/>
+    </clipPath>
+  </defs>
+
+  <ellipse cx="340" cy="618" rx="192" ry="28" fill="url(#floorShadow)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <circle cx="340" cy="330" r="268" fill="url(#base)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <g clip-path="url(#ballClip)" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <ellipse cx="292" cy="268" rx="62" ry="18" fill="#6b3d1a" opacity="0.28" transform="rotate(-22 292 268)" style="fill:rgb(107, 61, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.28;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <ellipse cx="410" cy="310" rx="48" ry="13" fill="#6b3d1a" opacity="0.22" transform="rotate(14 410 310)" style="fill:rgb(107, 61, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.22;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <ellipse cx="348" cy="420" rx="70" ry="16" fill="#2e1408" opacity="0.30" transform="rotate(-8 348 420)" style="fill:rgb(46, 20, 8);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.3;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <ellipse cx="250" cy="370" rx="38" ry="11" fill="#6b3d1a" opacity="0.20" transform="rotate(30 250 370)" style="fill:rgb(107, 61, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.2;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <ellipse cx="430" cy="230" rx="42" ry="11" fill="#2e1408" opacity="0.25" transform="rotate(-18 430 230)" style="fill:rgb(46, 20, 8);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.25;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <ellipse cx="320" cy="480" rx="52" ry="13" fill="#6b3d1a" opacity="0.18" transform="rotate(10 320 480)" style="fill:rgb(107, 61, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.18;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <ellipse cx="460" cy="400" rx="36" ry="10" fill="#2e1408" opacity="0.22" transform="rotate(-35 460 400)" style="fill:rgb(46, 20, 8);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.22;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <ellipse cx="220" cy="300" rx="44" ry="12" fill="#6b3d1a" opacity="0.16" transform="rotate(25 220 300)" style="fill:rgb(107, 61, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.16;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+    <circle cx="340" cy="330" r="268" fill="url(#deepshadow)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <circle cx="340" cy="330" r="268" fill="url(#gloss)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <circle cx="340" cy="330" r="268" fill="url(#highlight)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+    <ellipse cx="305" cy="278" rx="36" ry="16" fill="#f8ead8" opacity="0.18" transform="rotate(-30 305 278)" style="fill:rgb(248, 234, 216);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.18;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  </g>
+</svg>

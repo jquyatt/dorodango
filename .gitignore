@@ -1,0 +1,15 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Build output (the assembled .app + iconset)
+build/
+
+# Xcode (if you ever open it there)
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcuserstate
+DerivedData/
+
+# macOS
+.DS_Store
