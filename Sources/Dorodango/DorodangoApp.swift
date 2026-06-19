@@ -23,7 +23,6 @@ final class PanelState: ObservableObject {
 /// Finder to start a drag without the panel vanishing.
 final class KeyablePanel: NSPanel {
     override var canBecomeKey: Bool { true }
-    override var canBecomeMain: Bool { false }
 }
 
 /// Transparent overlay on the status-bar button that accepts dropped files and

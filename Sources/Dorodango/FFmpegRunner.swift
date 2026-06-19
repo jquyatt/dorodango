@@ -19,30 +19,6 @@ final class FFmpegRunner {
         process?.terminate()
     }
 
-    // MARK: Tool discovery
-
-    static func locate(_ tool: String) -> String? {
-        let candidates = [
-            "/opt/homebrew/bin/\(tool)",   // Apple Silicon Homebrew
-            "/usr/local/bin/\(tool)",      // Intel Homebrew
-            "/usr/bin/\(tool)"
-        ]
-        for path in candidates where FileManager.default.isExecutableFile(atPath: path) {
-            return path
-        }
-        let which = Process()
-        which.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        which.arguments = ["which", tool]
-        let pipe = Pipe()
-        which.standardOutput = pipe
-        try? which.run()
-        which.waitUntilExit()
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let path = String(data: data, encoding: .utf8)?
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        return (path?.isEmpty == false) ? path : nil
-    }
-
     // MARK: ffprobe helpers
 
     private func probeDuration(of url: URL, ffprobe: String) -> Double {
@@ -82,7 +58,7 @@ final class FFmpegRunner {
     // MARK: Output path
 
     private func outputURL(for source: URL, destination: URL?) -> URL {
-        let base = source.deletingPathExtension().lastPathComponent + settings.outputSuffix
+        let base = source.deletingPathExtension().lastPathComponent + "_COMP"
         let folder = destination ?? source.deletingLastPathComponent()
         return folder.appendingPathComponent(base).appendingPathExtension("mp4")
     }
@@ -141,8 +117,8 @@ final class FFmpegRunner {
                  destination: URL?,
                  onProgress: @escaping (Double, String?) -> Void) async throws -> URL {
 
-        guard let ffmpeg = Self.locate("ffmpeg") else { throw RunnerError.toolMissing("ffmpeg") }
-        guard let ffprobe = Self.locate("ffprobe") else { throw RunnerError.toolMissing("ffprobe") }
+        guard let ffmpeg = ToolManager.locate("ffmpeg") else { throw RunnerError.toolMissing("ffmpeg") }
+        guard let ffprobe = ToolManager.locate("ffprobe") else { throw RunnerError.toolMissing("ffprobe") }
 
         let output = outputURL(for: input, destination: destination)
         let duration = probeDuration(of: input, ffprobe: ffprobe)

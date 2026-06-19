@@ -48,8 +48,7 @@ enum ToolManager {
 
     // MARK: Status
 
-    struct ToolStatus: Identifiable {
-        let id = UUID()
+    struct ToolStatus {
         let name: String
         let installed: Bool
         let version: String
@@ -62,17 +61,6 @@ enum ToolManager {
         let out = run(path, versionArgs).output
         return ToolStatus(name: tool, installed: true, version: parseVersion(tool: tool, raw: out))
     }
-
-    static func allStatuses() -> [ToolStatus] {
-        [
-            status(for: "brew", versionArgs: ["--version"]),
-            status(for: "ffmpeg", versionArgs: ["-version"]),
-            status(for: "ffprobe", versionArgs: ["-version"]),
-            status(for: "yt-dlp", versionArgs: ["--version"])
-        ]
-    }
-
-    static var homebrewInstalled: Bool { locate("brew") != nil }
 
     private static func parseVersion(tool: String, raw: String) -> String {
         let first = raw.split(separator: "\n").first.map(String.init) ?? raw

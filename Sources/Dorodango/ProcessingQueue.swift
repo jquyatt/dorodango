@@ -7,7 +7,7 @@ import SwiftUI
 final class ProcessingQueue: ObservableObject {
     @Published private(set) var items: [QueueItem] = []
     @Published private(set) var isRunning: Bool = false
-    @Published private(set) var currentItem: QueueItem? = nil
+    private var currentItem: QueueItem? = nil   // internal guard only; no view reads it
 
     /// Settings live here so a single source of truth drives both UI and encoder.
     @Published var settings = ProcessingSettings()
@@ -54,31 +54,6 @@ final class ProcessingQueue: ObservableObject {
         cancelRequested = true
         downloader?.cancel()
         runner?.cancel()
-    }
-
-    // MARK: Overall progress
-
-    /// Fraction across the whole queue (counts finished items + current progress).
-    var overallProgress: Double {
-        let relevant = items.filter {
-            switch $0.status {
-            case .queued, .downloading, .processing, .done: return true
-            default: return false
-            }
-        }
-        guard !relevant.isEmpty else { return 0 }
-        let total = relevant.reduce(0.0) { acc, item in
-            switch item.status {
-            case .done: return acc + 1.0
-            case .downloading, .processing: return acc + item.progress
-            default: return acc
-            }
-        }
-        return total / Double(relevant.count)
-    }
-
-    var pendingCount: Int {
-        items.filter { $0.status == .queued || $0.status.isActive }.count
     }
 
     // MARK: Serial runner

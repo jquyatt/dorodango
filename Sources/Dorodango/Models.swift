@@ -52,7 +52,6 @@ struct ProcessingSettings {
     var downloadQuality: DownloadQuality = .p1080
 
     // Output + UX.
-    var outputSuffix: String = "_COMP"
     var outputFolder: URL? = nil      // nil => alongside the source file.
     var notifyOnComplete: Bool = true
 
@@ -170,17 +169,6 @@ final class QueueItem: ObservableObject, Identifiable {
         case done
         case failed(String)
         case cancelled
-
-        var label: String {
-            switch self {
-            case .queued: return "Queued"
-            case .downloading: return "Downloading"
-            case .processing: return "Processing"
-            case .done: return "Done"
-            case .failed: return "Failed"
-            case .cancelled: return "Cancelled"
-            }
-        }
 
         var symbolName: String {
             switch self {
