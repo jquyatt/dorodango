@@ -1,10 +1,16 @@
 # Dorodango — menu bar video processor
 
+**As per Adam Savage on Mythbusters S06E14, "You can, in fact, polish a poop."**
+
+Eponymously inspired by the ancient Japanese art of forming dirt into polished
+balls by hand, Dorodango takes rough, oversized footage and patiently works it
+into a clean, compact, consistent sphere of a file — quality smoothed, loudness
+evened, bitrate reined in.
+
 A native macOS menu bar app (SwiftUI in a persistent status-bar panel) that
-batch-compresses, caps bitrate, and loudness-normalizes video with `ffmpeg`.
-It's the menu bar upgrade of the original Automator droplet: drag-and-drop or
-paste-a-URL intake, saved presets, custom ffmpeg flags, a queue with per-file
-progress, and a "batch done" notification.
+batch-compresses, caps bitrate, and loudness-normalizes video with `ffmpeg`:
+drag-and-drop or paste-a-URL intake, saved presets, custom ffmpeg flags, a queue
+with per-file progress, and a "batch done" notification.
 
 ## Requirements
 
