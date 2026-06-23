@@ -1,9 +1,10 @@
 # Dorodango — menu bar video processor
 
-A native macOS menu bar app (SwiftUI `MenuBarExtra`) that batch-compresses,
-caps bitrate, and loudness-normalizes video with `ffmpeg`. It's the menu bar
-upgrade of the original Automator droplet: quick processing settings, a queue,
-per-file + overall progress, and a "batch done" notification.
+A native macOS menu bar app (SwiftUI in a persistent status-bar panel) that
+batch-compresses, caps bitrate, and loudness-normalizes video with `ffmpeg`.
+It's the menu bar upgrade of the original Automator droplet: drag-and-drop or
+paste-a-URL intake, saved presets, custom ffmpeg flags, a queue with per-file
+progress, and a "batch done" notification.
 
 ## Requirements
 
@@ -27,7 +28,7 @@ agent app). Click it to open the panel. For quick iteration: `swift run`.
 ## The pipeline
 
 This reproduces the original Dorodango bash workflow and exposes its knobs.
-Output is always `<name>_COMP.mp4` (suffix configurable in code).
+Output is always `<name>_COMP.mp4`.
 
 **Video** — capped CRF by default: `libx264 -crf 21 -maxrate <cap> -bufsize <1.33×cap>`,
 `-preset slow`, `profile main`, `yuv420p`, Rec.709 color tags, `+faststart`.
@@ -47,8 +48,13 @@ stage, then `loudnorm` to the target LUFS, then `aac` at the chosen bitrate,
 | Loudness | `loudnorm` integrated target, −24…−9 LUFS (TP −1.5, LRA 11 fixed) | −16 |
 | Compression | Off / Light / Medium / Heavy dynamics; bottom = bypassed | Medium |
 | Audio bitrate | AAC bitrate 96/128/192/256k | 128k |
+| Extra flags | Raw ffmpeg flags appended after the video / audio blocks | empty |
+| Download quality | Caps yt-dlp fetch resolution (Source / 2160 / 1080 / 720) | 1080p |
 | Save to | Destination folder, or alongside source | source |
 | Notify | Notification Center banner when the batch finishes | on |
+
+Settings are organized into named **presets** (see below), with a dropdown at the
+top of the panel.
 
 ### Speed / encoder (one slider)
 
@@ -76,11 +82,38 @@ Stepped so each level is reproducible (the slider snaps to detents):
 | Medium | `threshold=-18dB:ratio=4:attack=20:release=250:makeup=6` (original) |
 | Heavy | `threshold=-20dB:ratio=6:attack=10:release=200:makeup=8` |
 
+## Presets
+
+A preset is a named bundle of *every* processing setting (including the custom
+flags). Pick one from the dropdown at the top of settings to load it. The •••
+menu offers:
+
+- **Save** — overwrite the selected preset with the current settings
+- **Save as new…** — store the current settings under a new name
+- **Rename…**, **Delete**
+- **Set as default** — the ★-marked preset loads on launch
+- **Import… / Export…** — single presets as `.json`, for sharing or backup
+
+The seeded **Default** preset is locked (can't be renamed or deleted) and is the
+initial launch default. Presets persist in `UserDefaults`.
+
+## Custom ffmpeg flags
+
+Two fields under the audio section append raw flags to the command. **Video**
+flags are injected right after the video codec block; **Audio** flags right after
+the audio block — so each lands on the correct stream. A quote-aware parser keeps
+values like `-metadata title="My Clip"` intact.
+
+Examples: `-vf negate`, `-tune film` (video); `-af volume=0.1`, `-ar 44100`
+(audio). A bad flag just makes that one item fail with ffmpeg's error shown in
+its row.
+
 ## Downloading with yt-dlp
 
-Paste a video URL into the link row and hit **Add URL**. Remote items run a
-two-phase job: yt-dlp downloads to a temp folder first (with its own progress
-bar), then the result feeds straight into the normal encode pipeline. The
+Click the drop zone and paste a URL (⌘V, then ↩), or drop a link onto the panel
+or the menu bar icon. Remote items run a two-phase job: yt-dlp downloads to a
+temp folder first (with its own progress bar), then the result feeds straight
+into the normal encode pipeline. The
 **Download quality** setting caps resolution (`Source` / 2160 / 1080 / 720) via
 yt-dlp's `-f` selector. Finished downloads land in `~/Downloads` unless you've
 chosen an output folder. Note: downloading is subject to each site's terms — use
@@ -88,31 +121,42 @@ responsibly.
 
 ## Tools section
 
-Settings includes a Tools panel showing the installed ffmpeg / ffprobe / yt-dlp
-versions. **Update yt-dlp** runs `yt-dlp -U` (its built-in self-update, no brew
-needed). **Update ffmpeg (brew)** runs `brew upgrade ffmpeg`. yt-dlp breaks often
-as sites change, so update it first when a download misbehaves.
+A foldable Tools panel (chevron by the title) at the bottom of settings lists
+Homebrew / ffmpeg / yt-dlp with their versions and a per-row **Install** or
+**Update** action. yt-dlp updates via `yt-dlp -U` (self-update, no brew); ffmpeg
+and yt-dlp install/update through Homebrew; Homebrew itself refreshes with
+`brew update`, or installs via a Terminal hand-off. It re-checks versions each
+time settings opens. yt-dlp breaks often as sites change, so update it first when
+a download misbehaves.
 
 ## Using it
 
-- **Drop videos** on the panel or click **Add files…**; they queue and process
-  one at a time automatically.
-- The **sliders button** (top right) flips to settings.
+- **Drop videos** on the panel or the menu bar icon, click **Add files…**, or
+  paste a URL into the drop zone; they queue and process one at a time.
+- The **sliders button** (top right) flips to settings; the queue section appears
+  only once it has items, with **Clear done** in its header.
 - Each row shows a live progress bar; finished rows show a size delta
   (e.g. `120 MB → 38 MB  (−68%)`) and a Reveal-in-Finder button.
-- Footer shows overall queue progress and items remaining.
+- The menu bar icon spins while work is in progress. Right-click it for **Quit**.
 
 ## Architecture
 
 ```
-DorodangoApp            MenuBarExtra scene + menu bar icon
-  └─ ProcessingQueue    @MainActor ObservableObject — serial work loop, owns
-     │                  settings + items, overall progress, completion notify
-     ├─ ProcessingSettings   value type bound to the settings controls
-     ├─ [QueueItem]          per-file observable: status, progress, detail
-     └─ FFmpegRunner         locates ffmpeg/ffprobe, probes duration + audio,
-                             builds args, parses `-progress` for real progress
-Views: MenuContentView (panel) · DropZone · QueueListView/QueueRowView · SettingsView
+DorodangoApp / AppDelegate   status-bar item + persistent KeyablePanel (NSPanel),
+  │                          spinning icon, right-click Quit
+  ├─ ProcessingQueue   @MainActor ObservableObject — serial work loop, owns the
+  │   │                live settings + items, fires the completion notification
+  │   ├─ ProcessingSettings   Codable value type bound to the settings controls
+  │   ├─ [QueueItem]          per-file observable: file or remote URL, status,
+  │   │                       progress, detail
+  │   ├─ YtDlpRunner          downloads remote items, parses yt-dlp progress
+  │   └─ FFmpegRunner         locates tools, probes duration + audio, builds args
+  │                           (incl. custom flags), parses `-progress`
+  ├─ PresetStore       presets list, selection, default; JSON import/export
+  ├─ ToolManager       locate / version / install / update for brew/ffmpeg/yt-dlp
+  └─ Notifier          UserNotifications-based "batch done" banner
+Views: MenuContentView · DropZone · QueueListView/QueueRowView · SettingsView ·
+       PresetsBar · ToolsView
 ```
 
 Progress is real: `ffprobe` reports source duration, then ffmpeg's `out_time_ms`
@@ -127,5 +171,5 @@ from `-progress pipe:1` is divided by it.
   cap, turbo mode hits the ceiling more often and quality drops in busy scenes.
 - Two-pass `loudnorm` (measure → apply) is more accurate than the current
   single pass; could be a "high accuracy loudness" toggle.
-- Settings reset each launch; persist with `@AppStorage` when you're happy with
-  the defaults.
+- Custom flags are appended verbatim — a flag that conflicts with our own (e.g.
+  re-specifying `-c:v`) will make that item fail rather than silently win.
