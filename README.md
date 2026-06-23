@@ -2,6 +2,8 @@
 
 **As per Adam Savage on Mythbusters S06E14, "You can, in fact, polish a poop."**
 
+You're the video engineer for a live event. The client delivers their final promotional video minutes before showtime. You load it in as-is. What you miss: bitrate through the roof, audio normalized so low it's inaudible. The video stutters. The audio engineer cranks the pre-amp gain +30dB just to hear anything. Now the client blames you for choppy playback. The audio engineer blames you for making them crank so hard. You hope they turn that channel back down before the next video. If they don't, it fires hot, and you get blamed again. We say, we're tired of this 💩.
+
 Eponymously inspired by the ancient Japanese art of forming dirt into polished
 balls by hand, Dorodango takes rough, oversized footage and patiently works it
 into a clean, compact, consistent sphere of a file — quality smoothed, loudness
