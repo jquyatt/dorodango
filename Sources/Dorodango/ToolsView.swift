@@ -23,20 +23,33 @@ struct ToolsView: View {
     @State private var installed: [String: Bool] = [:]
     @State private var busyKey: String? = nil
     @State private var message: [String: String] = [:]
+    @AppStorage("dorodango.toolsExpanded") private var expanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Tools").font(.subheadline.bold())
+                Button {
+                    withAnimation { expanded.toggle() }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: expanded ? "chevron.down" : "chevron.right").font(.caption2)
+                        Text("Tools").font(.subheadline.bold())
+                    }
+                }
+                .buttonStyle(.borderless)
                 Spacer()
-                Button { refreshAll() } label: { Image(systemName: "arrow.clockwise") }
-                    .buttonStyle(.borderless)
-                    .help("Re-check versions")
-                    .disabled(busyKey != nil)
+                if expanded {
+                    Button { refreshAll() } label: { Image(systemName: "arrow.clockwise") }
+                        .buttonStyle(.borderless)
+                        .help("Re-check versions")
+                        .disabled(busyKey != nil)
+                }
             }
-            ForEach(tools) { row($0) }
+            if expanded {
+                ForEach(tools) { row($0) }
+            }
         }
-        .onAppear { refreshAll() }   // re-detect on every open (catches external installs)
+        .onAppear { if expanded { refreshAll() } }   // re-detect on open (catches external installs)
     }
 
     // MARK: Row

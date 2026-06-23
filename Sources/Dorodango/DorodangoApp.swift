@@ -45,7 +45,7 @@ final class DropTargetView: NSView {
         let menu = NSMenu()
         let quit = NSMenuItem(title: "Quit",
                               action: #selector(NSApplication.terminate(_:)),
-                              keyEquivalent: "q")
+                              keyEquivalent: "")
         quit.target = NSApp
         menu.addItem(quit)
         NSMenu.popUpContextMenu(menu, with: event, for: self)
@@ -146,6 +146,7 @@ final class IconAnimator {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let queue = ProcessingQueue()
     let panelState = PanelState()
+    let presets = PresetStore()
 
     private var statusItem: NSStatusItem!
     private var panel: KeyablePanel!
@@ -155,6 +156,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var iconAnimator: IconAnimator?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        #if DEBUG
+        FFmpegRunner._tokenizeSelfCheck()
+        #endif
+        queue.settings = presets.selected.settings   // launch with the default preset
         Notifier.requestAuthorization()
         setupStatusItem()
         setupPanel()
@@ -218,6 +223,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let root = MenuContentView()
             .environmentObject(queue)
             .environmentObject(panelState)
+            .environmentObject(presets)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
 
         let controller = NSHostingController(rootView: root)

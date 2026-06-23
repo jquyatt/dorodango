@@ -5,7 +5,8 @@ import SwiftUI
 
 /// User-adjustable settings exposed in the menu bar panel.
 /// Mirrors the original Dorodango bash pipeline, with knobs surfaced.
-struct ProcessingSettings {
+/// Codable so it can be stored in presets and exported as JSON.
+struct ProcessingSettings: Codable {
 
     // Video quality: capped-CRF model (quality floor + bitrate ceiling).
     var crf: Int = 21                 // x264 quality. Lower = better/bigger. 18–28 useful.
@@ -51,11 +52,15 @@ struct ProcessingSettings {
     // Download (yt-dlp). Caps the fetched resolution before encoding.
     var downloadQuality: DownloadQuality = .p1080
 
+    // Extra ffmpeg flags, injected verbatim after our video / audio blocks.
+    var extraVideoArgs: String = ""
+    var extraAudioArgs: String = ""
+
     // Output + UX.
     var outputFolder: URL? = nil      // nil => alongside the source file.
     var notifyOnComplete: Bool = true
 
-    enum DownloadQuality: String, CaseIterable, Identifiable {
+    enum DownloadQuality: String, Codable, CaseIterable, Identifiable {
         case source = "Source"
         case p2160 = "2160p"
         case p1080 = "1080p"
@@ -76,12 +81,12 @@ struct ProcessingSettings {
     // MARK: Enums
 
     /// x264 preset names. Ordering for the slider lives in `presetLadder`.
-    enum EncoderPreset: String, CaseIterable, Identifiable {
+    enum EncoderPreset: String, Codable, CaseIterable, Identifiable {
         case ultrafast, superfast, veryfast, faster, fast, medium, slow
         var id: String { rawValue }
     }
 
-    enum AudioChannels: String, CaseIterable, Identifiable {
+    enum AudioChannels: String, Codable, CaseIterable, Identifiable {
         case stereo = "Stereo"
         case mono = "Sum to mono"
         var id: String { rawValue }
@@ -90,7 +95,7 @@ struct ProcessingSettings {
 
     /// Dynamics compression intensity. `.off` bypasses the filter entirely.
     /// Stepped so each level is reproducible; the slider snaps to these detents.
-    enum Compression: String, CaseIterable, Identifiable {
+    enum Compression: String, Codable, CaseIterable, Identifiable {
         case off = "Off"
         case light = "Light"
         case medium = "Medium"

@@ -5,14 +5,20 @@ import AppKit
 /// items pick up the current configuration.
 struct SettingsView: View {
     @EnvironmentObject var queue: ProcessingQueue
+    @EnvironmentObject var presets: PresetStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            PresetsBar()
+            Divider()
+
             Text("Processing settings").font(.subheadline.bold())
 
             videoSection
             Divider()
             audioSection
+            Divider()
+            extraFlagsSection
             Divider()
             downloadSection
             Divider()
@@ -30,6 +36,24 @@ struct SettingsView: View {
                 .buttonStyle(.borderless)
                 .font(.caption)
                 Spacer()
+            }
+        }
+    }
+
+    // MARK: Extra ffmpeg flags
+
+    private var extraFlagsSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Extra ffmpeg flags").font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                Text("Video").font(.caption2).foregroundStyle(.tertiary).frame(width: 36, alignment: .leading)
+                TextField("e.g. -tune film", text: bind(\.extraVideoArgs))
+                    .textFieldStyle(.roundedBorder).font(.caption2)
+            }
+            HStack(spacing: 6) {
+                Text("Audio").font(.caption2).foregroundStyle(.tertiary).frame(width: 36, alignment: .leading)
+                TextField("e.g. -ar 44100", text: bind(\.extraAudioArgs))
+                    .textFieldStyle(.roundedBorder).font(.caption2)
             }
         }
     }
@@ -107,9 +131,9 @@ struct SettingsView: View {
                                       set: { queue.settings.speedIndex = Int($0) }),
                        in: 0...Double(ProcessingSettings.maxSpeedIndex), step: 1)
                 HStack {
-                    Text("Best").font(.caption2).foregroundStyle(.tertiary)
+                    Text("Best").font(.caption2).foregroundStyle(.secondary)
                     Spacer()
-                    Text("Fast").font(.caption2).foregroundStyle(.tertiary)
+                    Text("Fast").font(.caption2).foregroundStyle(.secondary)
                     Spacer()
                     Text("HW").font(.caption2)
                         .foregroundStyle(isHW ? Color.orange : Color.secondary)
@@ -156,19 +180,28 @@ struct SettingsView: View {
     // MARK: Output
 
     private var outputSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        let custom = queue.settings.outputFolder
+        return VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Save to:").font(.caption)
-                Text(queue.settings.outputFolder?.lastPathComponent ?? "Same as source")
+                Text(custom?.lastPathComponent ?? "Default")
                     .font(.caption).foregroundStyle(.secondary)
                     .lineLimit(1).truncationMode(.middle)
                 Spacer()
                 Button("Choose…") { chooseFolder() }.buttonStyle(.borderless).font(.caption)
-                if queue.settings.outputFolder != nil {
+                if custom != nil {
                     Button("Reset") { queue.settings.outputFolder = nil }
                         .buttonStyle(.borderless).font(.caption)
                 }
             }
+            // Make the split behavior explicit when no folder is chosen.
+            Text(custom == nil
+                 ? "Local files save next to the source.\nURL downloads go to Downloads."
+                 : "Both local files and URL downloads save here.")
+                .font(.caption2).foregroundStyle(.tertiary)
+                .fixedSize(horizontal: false, vertical: true)   // wrap instead of truncating
+                .frame(maxWidth: .infinity, alignment: .leading)
+
             Toggle("Notify when batch finishes", isOn: bind(\.notifyOnComplete))
                 .font(.caption)
         }

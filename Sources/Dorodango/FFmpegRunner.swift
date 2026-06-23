@@ -63,6 +63,31 @@ final class FFmpegRunner {
         return folder.appendingPathComponent(base).appendingPathExtension("mp4")
     }
 
+    /// Split a flag string into argv tokens, respecting double quotes so values
+    /// like `-metadata title="My Video"` stay together. Empty string → no args.
+    static func tokenize(_ s: String) -> [String] {
+        var tokens: [String] = []
+        var current = ""
+        var inQuotes = false
+        for ch in s {
+            if ch == "\"" { inQuotes.toggle() }
+            else if ch == " " && !inQuotes {
+                if !current.isEmpty { tokens.append(current); current = "" }
+            } else { current.append(ch) }
+        }
+        if !current.isEmpty { tokens.append(current) }
+        return tokens
+    }
+
+    #if DEBUG
+    static func _tokenizeSelfCheck() {
+        assert(tokenize("") == [])
+        assert(tokenize("-tune film") == ["-tune", "film"])
+        assert(tokenize("  -pix_fmt   yuv420p ") == ["-pix_fmt", "yuv420p"])
+        assert(tokenize("-metadata title=\"My Video\"") == ["-metadata", "title=My Video"])
+    }
+    #endif
+
     // MARK: Build ffmpeg args
 
     private func ffmpegArguments(input: URL, output: URL, audioPresent: Bool) -> [String] {
@@ -85,6 +110,7 @@ final class FFmpegRunner {
         // Delivery-compat flags (same in both paths).
         args += ["-profile:v", "main", "-pix_fmt", "yuv420p",
                  "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709"]
+        args += Self.tokenize(settings.extraVideoArgs)   // user's extra video flags
 
         // ---- Audio ----
         if audioPresent {
@@ -96,6 +122,7 @@ final class FFmpegRunner {
                      "-b:a", "\(settings.audioBitrateKbps)k",
                      "-ar", "48000",
                      "-ac", "\(settings.audioChannels.ffmpegChannels)"]
+            args += Self.tokenize(settings.extraAudioArgs) // user's extra audio flags
         } else {
             args += ["-an"]
         }
