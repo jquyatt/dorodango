@@ -26,7 +26,7 @@ A native macOS menu bar app that batch-compresses, caps bitrate, and loudness-no
 ## Build & run
 
 ```bash
-cd DorodangoMenuBar
+cd Dorodango
 chmod +x build-app.sh
 ./build-app.sh            # produces build/Dorodango.app
 open build/Dorodango.app
