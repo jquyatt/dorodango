@@ -45,11 +45,11 @@ A circle icon appears in your menu bar — no Dock icon, it's an `LSUIElement` a
 
 ## The pipeline
 
-This reproduces the original Dorodango bash workflow and exposes its knobs. Output is always `<name>_COMP.mp4`.
-
 **Video** — capped CRF by default: `libx264 -crf 21 -maxrate <cap> -bufsize <1.33×cap>`, `-preset slow`, profile main, `yuv420p`, Rec.709 color tags, `+faststart`.
 
 **Audio** (auto-detected; `-an` when absent) — optional `acompressor` dynamics stage, then `loudnorm` to the target LUFS, then AAC at the chosen bitrate, 48 kHz, stereo or summed mono.
+
+Output is always `<name>_COMP.mp4`.
 
 ## Settings
 
